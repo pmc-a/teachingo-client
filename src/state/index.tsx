@@ -16,13 +16,20 @@ export interface StateContextType {
     signOut?(): Promise<void>;
     isAuthReady?: boolean;
     isFetching: boolean;
+    userType: UserTypes;
 }
 
 export const StateContext = createContext<StateContextType | null>(null);
 
+export enum UserTypes {
+    student = 'student',
+    teacher = 'teacher',
+}
+
 interface LoginResponse extends Response {
     parsedResponse?: {
         token: string;
+        type: UserTypes;
     };
 }
 
@@ -37,12 +44,14 @@ export default function AppStateProvider(
     const [error, setError] = useState<TwilioError | null>(null);
     const [isFetching, setIsFetching] = useState(false);
     const [accessToken, setAccessToken] = useState('');
+    const [userType, setUserType] = useState('');
 
     let contextValue = {
         accessToken,
         error,
         setError,
         isFetching,
+        userType,
     } as StateContextType;
 
     contextValue = {
@@ -101,10 +110,11 @@ export default function AppStateProvider(
                 setIsFetching(false);
                 res.parsedResponse = await res.json();
 
-                if (res && res.parsedResponse && res.parsedResponse.token) {
+                if (res && res.parsedResponse && res.parsedResponse) {
                     // Do we maybe need to parse this into local storage?
                     // A browser refresh will clear this down because it's simply stored in React Context
                     setAccessToken(res.parsedResponse.token);
+                    setUserType(res.parsedResponse.type);
                 }
 
                 return res;

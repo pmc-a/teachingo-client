@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
-import App from './App';
+import VideoCallingApp from './VideoCallingApp';
 import AppStateProvider, { useAppState } from './state';
 import {
     BrowserRouter as Router,
@@ -19,6 +19,8 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import theme from './theme';
 import './types';
 import { VideoProvider } from './components/VideoProvider';
+import TeacherPage from './pages/TeacherPage/TeacherPage';
+import StudentPage from './pages/StudentPage/StudentPage';
 
 // See: https://media.twiliocdn.com/sdk/js/video/releases/2.0.0/docs/global.html#ConnectOptions
 // for available connection options.
@@ -49,7 +51,7 @@ const VideoApp = (): React.ReactElement => {
                 dismissError={(): void => setError(null)}
                 error={error}
             />
-            <App />
+            <VideoCallingApp />
         </VideoProvider>
     );
 };
@@ -60,6 +62,12 @@ ReactDOM.render(
         <Router>
             <AppStateProvider>
                 <Switch>
+                    <PrivateRoute exact path="/teacher">
+                        <TeacherPage />
+                    </PrivateRoute>
+                    <PrivateRoute exact path="/student">
+                        <StudentPage />
+                    </PrivateRoute>
                     <PrivateRoute exact path="/">
                         <VideoApp />
                     </PrivateRoute>

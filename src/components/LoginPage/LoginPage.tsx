@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, FormEvent } from 'react';
-import { useAppState } from '../../state';
+import { useAppState, UserTypes } from '../../state';
 
 import Button from '@material-ui/core/Button';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     container: {
@@ -59,9 +59,8 @@ const theme = createMuiTheme({
 
 export default function LoginPage(): React.ReactElement {
     const classes = useStyles();
-    const { login, user } = useAppState();
+    const { login } = useAppState();
     const history = useHistory();
-    const location = useLocation<{ from: Location }>();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -72,15 +71,17 @@ export default function LoginPage(): React.ReactElement {
         e.preventDefault();
         setAuthError(null);
         login?.(email, password)
-            .then(() => {
-                history.replace(location?.state?.from || { pathname: '/' });
+            .then(res => {
+                if (res.parsedResponse?.type === UserTypes.teacher) {
+                    history.replace({ pathname: '/teacher' });
+                } else if (res.parsedResponse?.type === UserTypes.student) {
+                    history.replace({ pathname: '/student' });
+                } else {
+                    history.replace({ pathname: '/' });
+                }
             })
             .catch(err => setAuthError(err));
     };
-
-    if (user) {
-        history.replace('/');
-    }
 
     return (
         <ThemeProvider theme={theme}>
