@@ -21,11 +21,7 @@ export function getInitials(name: string) {
 
 export default function UserAvatar({ user }: { user: StateContextType['user'] }) {
   const classes = useStyles();
-  const { displayName, photoURL } = user!;
+  const { photoURL } = user!;
 
-  return photoURL ? (
-    <Avatar src={photoURL} />
-  ) : (
-    <Avatar className={classes.red}>{displayName ? getInitials(displayName) : <Person />}</Avatar>
-  );
+  return photoURL ? <Avatar src={photoURL} /> : <Avatar className={classes.red}>{<Person />}</Avatar>;
 }

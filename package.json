@@ -57,8 +57,7 @@
     ]
   },
   "scripts": {
-    "start": "npm:dev",
-    "dev": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
@@ -91,7 +90,7 @@
       "pre-commit": "lint-staged"
     }
   },
-  "proxy": "http://localhost:8081/",
+  "proxy": "http://localhost:8080/",
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"

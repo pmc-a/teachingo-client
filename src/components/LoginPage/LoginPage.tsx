@@ -5,11 +5,8 @@ import Button from '@material-ui/core/Button';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { ReactComponent as GoogleLogo } from './google-logo.svg';
-import { ReactComponent as TwilioLogo } from './twilio-logo.svg';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import videoLogo from './video-logo.png';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -62,72 +59,68 @@ const theme = createMuiTheme({
 
 export default function LoginPage() {
   const classes = useStyles();
-  const { signIn, user, isAuthReady } = useAppState();
+  const { login, user } = useAppState();
   const history = useHistory();
   const location = useLocation<{ from: Location }>();
-  const [passcode, setPasscode] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const [authError, setAuthError] = useState<Error | null>(null);
 
-  const isAuthEnabled = Boolean(process.env.REACT_APP_SET_AUTH);
-
-  const login = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setAuthError(null);
-    signIn?.(passcode)
-      .then(() => {
+    login?.(email, password)
+      .then(response => {
+        alert(`Success! ${response}`);
         history.replace(location?.state?.from || { pathname: '/' });
       })
       .catch(err => setAuthError(err));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    login();
-  };
-
-  if (user || !isAuthEnabled) {
+  if (user) {
     history.replace('/');
-  }
-
-  if (!isAuthReady) {
-    return null;
   }
 
   return (
     <ThemeProvider theme={theme}>
       <Grid container justify="center" alignItems="flex-start" className={classes.container}>
         <Paper className={classes.paper} elevation={6}>
-          <TwilioLogo className={classes.twilioLogo} />
-          <img className={classes.videoLogo} src={videoLogo} alt="Video Logo"></img>
+          <h1>Login</h1>
 
-          {process.env.REACT_APP_SET_AUTH === 'firebase' && (
-            <Button variant="contained" className={classes.button} onClick={login} startIcon={<GoogleLogo />}>
-              Sign in with Google
-            </Button>
-          )}
-
-          {process.env.REACT_APP_SET_AUTH === 'passcode' && (
-            <form onSubmit={handleSubmit}>
-              <Grid container alignItems="center" direction="column">
-                <TextField
-                  id="input-passcode"
-                  label="Passcode"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setPasscode(e.target.value)}
-                  type="password"
-                />
-                <div>
-                  {authError && (
-                    <Typography variant="caption" className={classes.errorMessage}>
-                      <ErrorOutlineIcon />
-                      {authError.message}
-                    </Typography>
-                  )}
-                </div>
-                <Button variant="contained" className={classes.button} type="submit" disabled={!passcode.length}>
-                  Submit
-                </Button>
-              </Grid>
-            </form>
-          )}
+          <form onSubmit={handleSubmit}>
+            <Grid container alignItems="center" direction="column">
+              <TextField
+                id="input-username"
+                label="Username"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                type="text"
+              />
+              <TextField
+                id="input-password"
+                label="Password"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                type="password"
+              />
+              <div>
+                {authError && (
+                  <Typography variant="caption" className={classes.errorMessage}>
+                    <ErrorOutlineIcon />
+                    {authError.message}
+                  </Typography>
+                )}
+              </div>
+              <Button
+                variant="contained"
+                className={classes.button}
+                type="submit"
+                disabled={!email.length || !password.length}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </form>
         </Paper>
       </Grid>
     </ThemeProvider>

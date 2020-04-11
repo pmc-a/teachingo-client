@@ -5,11 +5,6 @@ import Person from '@material-ui/icons/Person';
 import UserAvatar, { getInitials } from './UserAvatar';
 
 describe('the UserAvatar component', () => {
-  it('should display the users initials when there is a displayName property', () => {
-    const wrapper = shallow(<UserAvatar user={{ displayName: 'Test User' } as any} />);
-    expect(wrapper.find(Avatar).text()).toBe('TU');
-  });
-
   it('should display the Person icon when there is no displayName or photoURL properties', () => {
     const wrapper = shallow(<UserAvatar user={{} as any} />);
     expect(wrapper.find(Person).exists()).toBe(true);

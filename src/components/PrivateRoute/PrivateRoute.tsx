@@ -3,19 +3,13 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useAppState } from '../../state';
 
 export default function PrivateRoute({ children, ...rest }: RouteProps) {
-  const { isAuthReady, user } = useAppState();
-    
-  const renderChildren = user || !process.env.REACT_APP_SET_AUTH;
-
-  if (!renderChildren && !isAuthReady) {
-    return null;
-  }
+  const { user } = useAppState();
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        renderChildren ? (
+        user ? (
           children
         ) : (
           <Redirect
