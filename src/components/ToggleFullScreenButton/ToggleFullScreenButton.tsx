@@ -8,15 +8,15 @@ import IconButton from '@material-ui/core/IconButton';
 import useFullScreenToggle from '../../hooks/useFullScreenToggle/useFullScreenToggle';
 
 const FullscreenButton = styled(IconButton)({
-  marginLeft: 'auto',
+    marginLeft: 'auto',
 });
 
-export default function ToggleFullscreenButton() {
-  const [isFullScreen, toggleFullScreen] = useFullScreenToggle();
+export default function ToggleFullscreenButton(): React.ReactElement {
+    const [isFullScreen, toggleFullScreen] = useFullScreenToggle();
 
-  return (
-    <FullscreenButton aria-label={`full screen`} onClick={toggleFullScreen}>
-      {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-    </FullscreenButton>
-  );
+    return (
+        <FullscreenButton aria-label={`full screen`} onClick={toggleFullScreen}>
+            {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+        </FullscreenButton>
+    );
 }

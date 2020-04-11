@@ -9,26 +9,37 @@ import Tooltip from '@material-ui/core/Tooltip';
 import useLocalAudioToggle from '../../../hooks/useLocalAudioToggle/useLocalAudioToggle';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    fab: {
-      margin: theme.spacing(1),
-    },
-  })
+    createStyles({
+        fab: {
+            margin: theme.spacing(1),
+        },
+    })
 );
 
-export default function ToggleAudioButton(props: { disabled?: boolean }) {
-  const classes = useStyles();
-  const [isAudioEnabled, toggleAudioEnabled] = useLocalAudioToggle();
-
-  return (
-    <Tooltip
-      title={isAudioEnabled ? 'Mute Audio' : 'Unmute Audio'}
-      placement="top"
-      PopperProps={{ disablePortal: true }}
-    >
-      <Fab className={classes.fab} onClick={toggleAudioEnabled} disabled={props.disabled} data-cy-audio-toggle>
-        {isAudioEnabled ? <Mic /> : <MicOff />}
-      </Fab>
-    </Tooltip>
-  );
+interface Props {
+    disabled?: boolean;
 }
+
+const ToggleAudioButton: React.FC<Props> = ({ disabled }: Props) => {
+    const classes = useStyles();
+    const [isAudioEnabled, toggleAudioEnabled] = useLocalAudioToggle();
+
+    return (
+        <Tooltip
+            title={isAudioEnabled ? 'Mute Audio' : 'Unmute Audio'}
+            placement="top"
+            PopperProps={{ disablePortal: true }}
+        >
+            <Fab
+                className={classes.fab}
+                onClick={(): Function => toggleAudioEnabled}
+                disabled={disabled}
+                data-cy-audio-toggle
+            >
+                {isAudioEnabled ? <Mic /> : <MicOff />}
+            </Fab>
+        </Tooltip>
+    );
+};
+
+export default ToggleAudioButton;

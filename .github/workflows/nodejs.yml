@@ -21,6 +21,7 @@ jobs:
       with:
         node-version: 12.16.1
     - run: npm ci
+    - run: npm run lint
     - run: npm test
       env:
         CI: true

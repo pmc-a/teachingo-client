@@ -9,32 +9,44 @@ import enhanceMessage from './enhanceMessage';
 import { TwilioError } from 'twilio-video';
 
 interface ErrorDialogProps {
-  dismissError: Function;
-  error: TwilioError | null;
+    dismissError: Function;
+    error: TwilioError | null;
 }
 
-function ErrorDialog({ dismissError, error }: PropsWithChildren<ErrorDialogProps>) {
-  const { message, code } = error || {};
-  const enhancedMessage = enhanceMessage(message, code);
+function ErrorDialog({
+    dismissError,
+    error,
+}: PropsWithChildren<ErrorDialogProps>): React.ReactElement {
+    const { message, code } = error || {};
+    const enhancedMessage = enhanceMessage(message, code);
 
-  return (
-    <Dialog open={error !== null} onClose={() => dismissError()} fullWidth={true} maxWidth="xs">
-      <DialogTitle>ERROR</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{enhancedMessage}</DialogContentText>
-        {code && (
-          <pre>
-            <code>Error Code: {code}</code>
-          </pre>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => dismissError()} color="primary" autoFocus>
-          OK
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+    return (
+        <Dialog
+            open={error !== null}
+            onClose={(): Function => dismissError()}
+            fullWidth={true}
+            maxWidth="xs"
+        >
+            <DialogTitle>ERROR</DialogTitle>
+            <DialogContent>
+                <DialogContentText>{enhancedMessage}</DialogContentText>
+                {code && (
+                    <pre>
+                        <code>Error Code: {code}</code>
+                    </pre>
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    onClick={(): Function => dismissError()}
+                    color="primary"
+                    autoFocus
+                >
+                    OK
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
 
 export default ErrorDialog;

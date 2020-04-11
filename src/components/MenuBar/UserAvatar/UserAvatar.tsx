@@ -5,23 +5,32 @@ import Person from '@material-ui/icons/Person';
 import { StateContextType } from '../../../state';
 
 const useStyles = makeStyles({
-  red: {
-    color: 'white',
-    backgroundColor: '#F22F46',
-  },
+    red: {
+        color: 'white',
+        backgroundColor: '#F22F46',
+    },
 });
 
-export function getInitials(name: string) {
-  return name
-    .split(' ')
-    .map(text => text[0])
-    .join('')
-    .toUpperCase();
+export function getInitials(name: string): string {
+    return name
+        .split(' ')
+        .map(text => text[0])
+        .join('')
+        .toUpperCase();
 }
 
-export default function UserAvatar({ user }: { user: StateContextType['user'] }) {
-  const classes = useStyles();
-  const { photoURL } = user!;
+export default function UserAvatar({
+    user,
+}: {
+    user: StateContextType['user'];
+}): React.ReactElement {
+    const classes = useStyles();
+    // eslint-disable-next-line
+    const { photoURL } = user!;
 
-  return photoURL ? <Avatar src={photoURL} /> : <Avatar className={classes.red}>{<Person />}</Avatar>;
+    return photoURL ? (
+        <Avatar src={photoURL} />
+    ) : (
+        <Avatar className={classes.red}>{<Person />}</Avatar>
+    );
 }

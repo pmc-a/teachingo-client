@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Participant } from 'twilio-video';
 
-export default function useParticipantIsReconnecting(participant: Participant) {
-  const [isReconnecting, setIsReconnecting] = useState(false);
+export default function useParticipantIsReconnecting(
+    participant: Participant
+): boolean {
+    const [isReconnecting, setIsReconnecting] = useState(false);
 
-  useEffect(() => {
-    const handleReconnecting = () => setIsReconnecting(true);
-    const handleReconnected = () => setIsReconnecting(false);
+    useEffect(() => {
+        const handleReconnecting = (): void => setIsReconnecting(true);
+        const handleReconnected = (): void => setIsReconnecting(false);
 
-    participant.on('reconnecting', handleReconnecting);
-    participant.on('reconnected', handleReconnected);
-    return () => {
-      participant.off('reconnecting', handleReconnecting);
-      participant.off('reconnected', handleReconnected);
-    };
-  }, [participant]);
+        participant.on('reconnecting', handleReconnecting);
+        participant.on('reconnected', handleReconnected);
+        return (): void => {
+            participant.off('reconnecting', handleReconnecting);
+            participant.off('reconnected', handleReconnected);
+        };
+    }, [participant]);
 
-  return isReconnecting;
+    return isReconnecting;
 }

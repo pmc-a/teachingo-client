@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { AudioTrack as IAudioTrack } from 'twilio-video';
 
-interface AudioTrackProps {
-  track: IAudioTrack;
+interface Track {
+    track: IAudioTrack;
 }
 
-export default function AudioTrack({ track }: AudioTrackProps) {
-  useEffect(() => {
-    document.body.appendChild(track.attach());
-    return () => track.detach().forEach(el => el.remove());
-  }, [track]);
-  return null;
+export default function AudioTrack({ track }: Track): null {
+    useEffect(() => {
+        document.body.appendChild(track.attach());
+        return (): void =>
+            track.detach().forEach((el: HTMLMediaElement) => el.remove());
+    }, [track]);
+    return null;
 }

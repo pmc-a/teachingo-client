@@ -10,27 +10,31 @@ import Room from './components/Room/Room';
 import useRoomState from './hooks/useRoomState/useRoomState';
 
 const Container = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
 });
 
 const Main = styled('main')({
-  height: '100%',
-  position: 'relative',
+    height: '100%',
+    position: 'relative',
 });
 
-export default function App() {
-  const roomState = useRoomState();
+export default function App(): React.ReactElement {
+    const roomState = useRoomState();
 
-  return (
-    <Container>
-      <MenuBar />
-      <Main>
-        {roomState === 'disconnected' ? <LocalVideoPreview /> : <Room />}
-        <Controls />
-      </Main>
-      <ReconnectingNotification />
-    </Container>
-  );
+    return (
+        <Container>
+            <MenuBar />
+            <Main>
+                {roomState === 'disconnected' ? (
+                    <LocalVideoPreview />
+                ) : (
+                    <Room />
+                )}
+                <Controls />
+            </Main>
+            <ReconnectingNotification />
+        </Container>
+    );
 }

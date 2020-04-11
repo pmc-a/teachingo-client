@@ -5,10 +5,10 @@ import usePublications from '../../hooks/usePublications/usePublications';
 import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 
 interface ParticipantTracksProps {
-  participant: Participant;
-  disableAudio?: boolean;
-  enableScreenShare?: boolean;
-  videoPriority?: Track.Priority | null;
+    participant: Participant;
+    disableAudio?: boolean;
+    enableScreenShare?: boolean;
+    videoPriority?: Track.Priority | null;
 }
 
 /*
@@ -20,35 +20,39 @@ interface ParticipantTracksProps {
  */
 
 export default function ParticipantTracks({
-  participant,
-  disableAudio,
-  enableScreenShare,
-  videoPriority,
-}: ParticipantTracksProps) {
-  const { room } = useVideoContext();
-  const publications = usePublications(participant);
-  const isLocal = participant === room.localParticipant;
+    participant,
+    disableAudio,
+    enableScreenShare,
+    videoPriority,
+}: ParticipantTracksProps): React.ReactElement {
+    const { room } = useVideoContext();
+    const publications = usePublications(participant);
+    const isLocal = participant === room.localParticipant;
 
-  let filteredPublications;
+    let filteredPublications;
 
-  if (enableScreenShare && publications.some(p => p.trackName === 'screen')) {
-    filteredPublications = publications.filter(p => p.trackName !== 'camera');
-  } else {
-    filteredPublications = publications.filter(p => p.trackName !== 'screen');
-  }
+    if (enableScreenShare && publications.some(p => p.trackName === 'screen')) {
+        filteredPublications = publications.filter(
+            p => p.trackName !== 'camera'
+        );
+    } else {
+        filteredPublications = publications.filter(
+            p => p.trackName !== 'screen'
+        );
+    }
 
-  return (
-    <>
-      {filteredPublications.map(publication => (
-        <Publication
-          key={publication.kind}
-          publication={publication}
-          participant={participant}
-          isLocal={isLocal}
-          disableAudio={disableAudio}
-          videoPriority={videoPriority}
-        />
-      ))}
-    </>
-  );
+    return (
+        <>
+            {filteredPublications.map(publication => (
+                <Publication
+                    key={publication.kind}
+                    publication={publication}
+                    participant={participant}
+                    isLocal={isLocal}
+                    disableAudio={disableAudio}
+                    videoPriority={videoPriority}
+                />
+            ))}
+        </>
+    );
 }

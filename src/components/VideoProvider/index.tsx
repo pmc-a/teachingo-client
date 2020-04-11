@@ -1,5 +1,11 @@
 import React, { createContext, ReactNode } from 'react';
-import { ConnectOptions, Room, TwilioError, LocalAudioTrack, LocalVideoTrack } from 'twilio-video';
+import {
+    ConnectOptions,
+    Room,
+    TwilioError,
+    LocalAudioTrack,
+    LocalVideoTrack,
+} from 'twilio-video';
 import { Callback, ErrorCallback } from '../../types';
 import { SelectedParticipantProvider } from './useSelectedParticipant/useSelectedParticipant';
 
@@ -16,52 +22,64 @@ import useRoom from './useRoom/useRoom';
  *  elsewhere in the application may cause problems as these hooks should not be used more than once in an application.
  */
 
-export interface IVideoContext {
-  room: Room;
-  localTracks: (LocalAudioTrack | LocalVideoTrack)[];
-  isConnecting: boolean;
-  connect: (token: string) => Promise<void>;
-  onError: ErrorCallback;
-  onDisconnect: Callback;
-  getLocalVideoTrack: () => Promise<LocalVideoTrack>;
+export interface VideoContextInterface {
+    room: Room;
+    localTracks: (LocalAudioTrack | LocalVideoTrack)[];
+    isConnecting: boolean;
+    connect: (token: string) => Promise<void>;
+    onError: ErrorCallback;
+    onDisconnect: Callback;
+    getLocalVideoTrack: () => Promise<LocalVideoTrack>;
 }
 
-export const VideoContext = createContext<IVideoContext>(null!);
+// eslint-disable-next-line
+export const VideoContext = createContext<VideoContextInterface>(null!);
 
 interface VideoProviderProps {
-  options?: ConnectOptions;
-  onError: ErrorCallback;
-  onDisconnect?: Callback;
-  children: ReactNode;
+    options?: ConnectOptions;
+    onError: ErrorCallback;
+    onDisconnect?: Callback;
+    children: ReactNode;
 }
 
-export function VideoProvider({ options, children, onError = () => {}, onDisconnect = () => {} }: VideoProviderProps) {
-  const onErrorCallback = (error: TwilioError) => {
-    console.log(`ERROR: ${error.message}`, error);
-    onError(error);
-  };
+export function VideoProvider({
+    options,
+    children,
+    onError = () => {}, // eslint-disable-line
+    onDisconnect = () => {}, // eslint-disable-line
+}: VideoProviderProps): React.ReactElement {
+    const onErrorCallback = (error: TwilioError): void => {
+        console.log(`ERROR: ${error.message}`, error);
+        onError(error);
+    };
 
-  const { localTracks, getLocalVideoTrack } = useLocalTracks();
-  const { room, isConnecting, connect } = useRoom(localTracks, onErrorCallback, options);
-
-  // Register onError and onDisconnect callback functions.
-  useHandleRoomDisconnectionErrors(room, onError);
-  useHandleTrackPublicationFailed(room, onError);
-  useHandleOnDisconnect(room, onDisconnect);
-
-  return (
-    <VideoContext.Provider
-      value={{
-        room,
+    const { localTracks, getLocalVideoTrack } = useLocalTracks();
+    const { room, isConnecting, connect } = useRoom(
         localTracks,
-        isConnecting,
-        onError: onErrorCallback,
-        onDisconnect,
-        getLocalVideoTrack,
-        connect,
-      }}
-    >
-      <SelectedParticipantProvider room={room}>{children}</SelectedParticipantProvider>
-    </VideoContext.Provider>
-  );
+        onErrorCallback,
+        options
+    );
+
+    // Register onError and onDisconnect callback functions.
+    useHandleRoomDisconnectionErrors(room, onError);
+    useHandleTrackPublicationFailed(room, onError);
+    useHandleOnDisconnect(room, onDisconnect);
+
+    return (
+        <VideoContext.Provider
+            value={{
+                room,
+                localTracks,
+                isConnecting,
+                onError: onErrorCallback,
+                onDisconnect,
+                getLocalVideoTrack,
+                connect,
+            }}
+        >
+            <SelectedParticipantProvider room={room}>
+                {children}
+            </SelectedParticipantProvider>
+        </VideoContext.Provider>
+    );
 }
