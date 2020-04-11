@@ -6,14 +6,14 @@ export default function PrivateRoute({
     children,
     ...rest
 }: RouteProps): React.ReactElement {
-    const { user } = useAppState();
+    const { accessToken } = useAppState();
 
     return (
         <Route
             {...rest}
             // eslint-disable-next-line
             render={({ location }) =>
-                user ? (
+                accessToken ? (
                     children
                 ) : (
                     <Redirect

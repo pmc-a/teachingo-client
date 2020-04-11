@@ -2,10 +2,11 @@ import React, { createContext, useContext, useState } from 'react';
 import { TwilioError } from 'twilio-video';
 
 export interface StateContextType {
+    accessToken: string | null;
     error: TwilioError | null;
     setError(error: TwilioError | null): void;
     getToken(name: string, room: string, passcode?: string): Promise<string>;
-    login(username: string, password: string): Promise<Response>;
+    login(username: string, password: string): Promise<LoginResponse>;
     user?: null | {
         displayName: undefined;
         photoURL: undefined;
@@ -19,6 +20,12 @@ export interface StateContextType {
 
 export const StateContext = createContext<StateContextType | null>(null);
 
+interface LoginResponse extends Response {
+    parsedResponse?: {
+        token: string;
+    };
+}
+
 const apiDomain =
     process.env.NODE_ENV === 'development'
         ? 'http://localhost:8080'
@@ -29,8 +36,10 @@ export default function AppStateProvider(
 ): React.ReactElement {
     const [error, setError] = useState<TwilioError | null>(null);
     const [isFetching, setIsFetching] = useState(false);
+    const [accessToken, setAccessToken] = useState('');
 
     let contextValue = {
+        accessToken,
         error,
         setError,
         isFetching,
@@ -47,7 +56,7 @@ export default function AppStateProvider(
                 res.text()
             );
         },
-        login: async (email, password): Promise<Response> => {
+        login: async (email, password): Promise<LoginResponse> => {
             const endpoint = `${apiDomain}/api/login`;
 
             return fetch(endpoint, {
@@ -82,10 +91,22 @@ export default function AppStateProvider(
         setIsFetching(true);
         return contextValue
             .login(email, password)
-            .then(res => {
-                if (res.status === 400)
+            .then(async res => {
+                if (res.status === 400 || res.status === 404) {
                     throw new Error('Incorrect username or password!');
+                } else if (res.status >= 500) {
+                    throw new Error('Something went wrong');
+                }
+
                 setIsFetching(false);
+                res.parsedResponse = await res.json();
+
+                if (res && res.parsedResponse && res.parsedResponse.token) {
+                    // Do we maybe need to parse this into local storage?
+                    // A browser refresh will clear this down because it's simply stored in React Context
+                    setAccessToken(res.parsedResponse.token);
+                }
+
                 return res;
             })
             .catch(err => {

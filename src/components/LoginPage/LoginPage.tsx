@@ -72,8 +72,7 @@ export default function LoginPage(): React.ReactElement {
         e.preventDefault();
         setAuthError(null);
         login?.(email, password)
-            .then(response => {
-                alert(`Success! ${response}`);
+            .then(() => {
                 history.replace(location?.state?.from || { pathname: '/' });
             })
             .catch(err => setAuthError(err));

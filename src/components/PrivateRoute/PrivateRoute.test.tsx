@@ -11,9 +11,9 @@ jest.mock('../../state');
 const MockComponent = () => <h1>test</h1>;
 
 describe('the PrivateRoute component', () => {
-    it('should redirect to /login when there is no user', () => {
+    it('should redirect to /login when there is no access token', () => {
         mockUseAppState.mockImplementation(() => ({
-            user: false,
+            accessToken: false,
             isAuthReady: true,
         }));
         const wrapper = mount(
@@ -30,7 +30,7 @@ describe('the PrivateRoute component', () => {
 
     it('should render children when there is a user', () => {
         mockUseAppState.mockImplementation(() => ({
-            user: { details: 'mock' },
+            accessToken: 'mock-access-token',
             isAuthReady: true,
         }));
         const wrapper = mount(
