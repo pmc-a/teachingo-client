@@ -36,7 +36,7 @@ interface LoginResponse extends Response {
 const apiDomain =
     process.env.NODE_ENV === 'development'
         ? 'http://localhost:8080'
-        : process.env.TEACHINGO_API;
+        : 'https://protected-lowlands-54104.herokuapp.com';
 
 export default function AppStateProvider(
     props: React.PropsWithChildren<{}>
