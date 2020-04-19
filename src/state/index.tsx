@@ -7,6 +7,7 @@ export interface StateContextType {
     setError(error: TwilioError | null): void;
     getToken(name: string, room: string, passcode?: string): Promise<string>;
     login(username: string, password: string): Promise<LoginResponse>;
+    fetchLessons(): Promise<LessonsResponse>;
     user?: null | {
         displayName: undefined;
         photoURL: undefined;
@@ -31,6 +32,16 @@ interface LoginResponse extends Response {
         token: string;
         type: UserTypes;
     };
+}
+
+export interface Lesson extends Response {
+    id: number;
+    name: string;
+    date_time: string;
+}
+
+interface LessonsResponse extends Response {
+    lessons?: Lesson[];
 }
 
 const apiDomain =
@@ -77,6 +88,17 @@ export default function AppStateProvider(
                     email,
                     password,
                 }),
+            });
+        },
+        fetchLessons: async (): Promise<LessonsResponse> => {
+            const endpoint = `${apiDomain}/api/lessons`;
+
+            return fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    authorization: accessToken,
+                    'Content-Type': 'application/json',
+                },
             });
         },
     };
@@ -126,8 +148,31 @@ export default function AppStateProvider(
             });
     };
 
+    const fetchLessons: StateContextType['fetchLessons'] = () => {
+        setIsFetching(true);
+        return contextValue
+            .fetchLessons()
+            .then(async res => {
+                if (res.status === 400 || res.status === 404) {
+                    throw new Error('Incorrect username or password!');
+                } else if (res.status >= 500) {
+                    throw new Error('Something went wrong');
+                }
+
+                setIsFetching(false);
+                return res;
+            })
+            .catch(err => {
+                setError(err);
+                setIsFetching(false);
+                return Promise.reject(err);
+            });
+    };
+
     return (
-        <StateContext.Provider value={{ ...contextValue, getToken, login }}>
+        <StateContext.Provider
+            value={{ ...contextValue, getToken, login, fetchLessons }}
+        >
             {props.children}
         </StateContext.Provider>
     );

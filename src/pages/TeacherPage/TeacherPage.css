@@ -1,0 +1,29 @@
+.teacher-page-container {
+    padding: 10px;
+}
+
+.teacher-page-main-container {
+    display: flex;
+}
+
+.lesson-stream-view {
+    border: 1px white solid;
+    min-width: 75%;
+    margin-right: 10px;
+}
+
+.lesson-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.lesson-card {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.lesson-card-content {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,7 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TeacherPage should successfully render 1`] = `
-<div>
-  Teacher page view!
+<div
+  className="teacher-page-container"
+>
+  <h1>
+    Lessons
+  </h1>
+  <div
+    className="teacher-page-main-container"
+  >
+    <div
+      className="lesson-stream-view"
+    >
+      <span>
+        Lesson stream view
+      </span>
+      <div />
+    </div>
+    <LessonList
+      lessons={Array []}
+      setSelectedLesson={[Function]}
+    />
+  </div>
 </div>
 `;
