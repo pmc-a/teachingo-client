@@ -12,7 +12,7 @@ import useRoomState from './hooks/useRoomState/useRoomState';
 const Container = styled('div')({
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
+    height: '100%',
 });
 
 const Main = styled('main')({

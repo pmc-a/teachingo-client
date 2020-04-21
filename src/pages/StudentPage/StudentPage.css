@@ -1,8 +1,8 @@
-.teacher-page-container {
+.student-page-container {
     padding: 10px;
 }
 
-.teacher-page-main-container {
+.student-page-main-container {
     display: flex;
 }
 
@@ -28,8 +28,7 @@
     justify-content: space-between;
 }
 
-.start-button {
+.join-button {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
 }

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { Button } from '@material-ui/core';
 
 import { useAppState, Lesson } from '../../state';
+import VideoApp from '../../VideoApp';
 
 import './TeacherPage.css';
 
@@ -41,6 +43,8 @@ const TeacherPage: React.FC = () => {
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
+    const [isStartNowSelected, setStartNowSelected] = useState(false);
+
     useEffect(() => {
         (async (): Promise<void> => {
             const response = await appState.fetchLessons();
@@ -54,8 +58,17 @@ const TeacherPage: React.FC = () => {
             <h1>Lessons</h1>
             <div className="teacher-page-main-container">
                 <div className="lesson-stream-view">
-                    <span>Lesson stream view</span>
-                    <div>{selectedLesson?.name}</div>
+                    {selectedLesson && !isStartNowSelected && (
+                        <div className="start-button">
+                            <Button
+                                variant="contained"
+                                onClick={(): void => setStartNowSelected(true)}
+                            >
+                                Start {selectedLesson?.name}
+                            </Button>
+                        </div>
+                    )}
+                    {isStartNowSelected && <VideoApp />}
                 </div>
                 <LessonList
                     lessons={lessons}
