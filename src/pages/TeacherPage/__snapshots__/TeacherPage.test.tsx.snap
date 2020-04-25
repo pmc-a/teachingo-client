@@ -32,8 +32,8 @@ exports[`TeacherPage should successfully render 1`] = `
       </div>
     </div>
     <LessonList
+      handleSelectedLessonClick={[Function]}
       lessons={Array []}
-      setSelectedLesson={[Function]}
     />
   </div>
 </div>

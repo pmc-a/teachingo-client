@@ -1,5 +1,4 @@
 import React from 'react';
-import { Room } from 'twilio-video';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -8,6 +7,7 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import { useAppState } from '../../../state';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,13 +18,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function EndCallButton(): React.ReactElement {
+    const appState = useAppState();
+
     const classes = useStyles();
     const { room } = useVideoContext();
+
+    const handleDisconnectCall = (): void => {
+        room.disconnect();
+        appState.setIsVideoConnected(false);
+
+        if (appState.userType === 'teacher') {
+            appState.setShouldDisplaySummary(true);
+        }
+    };
 
     return (
         <Tooltip
             title={'End Call'}
-            onClick={(): Room => room.disconnect()}
+            onClick={handleDisconnectCall}
             placement="top"
             PopperProps={{ disablePortal: true }}
         >

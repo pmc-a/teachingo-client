@@ -11,12 +11,12 @@ import './TeacherPage.css';
 
 interface LessonListProps {
     lessons: Lesson[];
-    setSelectedLesson: (lesson: Lesson) => void;
+    handleSelectedLessonClick: (lesson: Lesson) => void;
 }
 
 const LessonList: React.FC<LessonListProps> = ({
     lessons,
-    setSelectedLesson,
+    handleSelectedLessonClick,
 }: LessonListProps) => {
     return (
         <div className="lesson-list-container">
@@ -25,7 +25,7 @@ const LessonList: React.FC<LessonListProps> = ({
                 <Card
                     key={lesson.id}
                     className="lesson-card"
-                    onClick={(): void => setSelectedLesson(lesson)}
+                    onClick={(): void => handleSelectedLessonClick(lesson)}
                 >
                     <CardContent className="lesson-card-content">
                         <span>{lesson.name}</span>
@@ -64,6 +64,15 @@ const TeacherPage: React.FC = () => {
         setTwilioVideoToken(twilioToken);
     };
 
+    const handleSelectedLessonClick = (lesson: Lesson): void => {
+        setSelectedLesson(lesson);
+
+        if (!appState.isVideoConnected && appState.shouldDisplaySummary) {
+            appState.setShouldDisplaySummary(false);
+            setStartNowSelected(false);
+        }
+    };
+
     return (
         <div className="teacher-page-container">
             <h1>Lessons</h1>
@@ -90,14 +99,26 @@ const TeacherPage: React.FC = () => {
                             </Button>
                         </div>
                     )}
-                    {isStartNowSelected && (
+                    {isStartNowSelected && !appState.shouldDisplaySummary && (
                         <VideoApp twilioToken={twilioVideoToken} />
                     )}
+
+                    {isStartNowSelected && appState.shouldDisplaySummary && (
+                        <div>Summary here!</div>
+                    )}
                 </div>
-                <LessonList
-                    lessons={lessons}
-                    setSelectedLesson={setSelectedLesson}
-                />
+                {!appState.isVideoConnected && (
+                    <LessonList
+                        lessons={lessons}
+                        handleSelectedLessonClick={handleSelectedLessonClick}
+                    />
+                )}
+
+                {appState.isVideoConnected && (
+                    <div className="lesson-list-container">
+                        Placeholder for chat
+                    </div>
+                )}
             </div>
         </div>
     );

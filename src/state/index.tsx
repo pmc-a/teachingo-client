@@ -17,6 +17,10 @@ export interface StateContextType {
     signOut?(): Promise<void>;
     isAuthReady?: boolean;
     isFetching: boolean;
+    isVideoConnected: boolean;
+    setIsVideoConnected: React.Dispatch<React.SetStateAction<boolean>>;
+    shouldDisplaySummary: boolean;
+    setShouldDisplaySummary: React.Dispatch<React.SetStateAction<boolean>>;
     userType: UserTypes;
 }
 
@@ -54,6 +58,8 @@ export default function AppStateProvider(
 ): React.ReactElement {
     const [error, setError] = useState<TwilioError | null>(null);
     const [isFetching, setIsFetching] = useState(false);
+    const [isVideoConnected, setIsVideoConnected] = useState(false);
+    const [shouldDisplaySummary, setShouldDisplaySummary] = useState(false);
     const [accessToken, setAccessToken] = useState(
         localStorage.getItem('accessToken') || ''
     );
@@ -64,6 +70,10 @@ export default function AppStateProvider(
         error,
         setError,
         isFetching,
+        isVideoConnected,
+        setIsVideoConnected,
+        shouldDisplaySummary,
+        setShouldDisplaySummary,
         userType,
     } as StateContextType;
 

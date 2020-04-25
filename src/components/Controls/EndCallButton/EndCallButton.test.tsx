@@ -11,6 +11,14 @@ const mockRoom: MockRoom = { disconnect: jest.fn() };
 jest.mock('../../../hooks/useVideoContext/useVideoContext', () => (): any => ({
     room: mockRoom,
 }));
+jest.mock('../../../state', () => ({
+    useAppState: jest
+        .fn()
+        .mockReturnValue({
+            setShouldDisplaySummary: jest.fn(),
+            setIsVideoConnected: jest.fn(),
+        }),
+}));
 
 describe('End Call button', () => {
     it('should disconnect from the room when clicked', () => {

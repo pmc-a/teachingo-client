@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -7,6 +7,8 @@ import Controls from './components/Controls/Controls';
 import LocalVideoPreview from './components/LocalVideoPreview/LocalVideoPreview';
 import ReconnectingNotification from './components/ReconnectingNotification/ReconnectingNotification';
 import Room from './components/Room/Room';
+
+import { useAppState } from './state';
 
 import useRoomState from './hooks/useRoomState/useRoomState';
 import useVideoContext from './hooks/useVideoContext/useVideoContext';
@@ -30,6 +32,7 @@ export default function App({
 }: {
     twilioToken?: string;
 }): React.ReactElement {
+    const appState = useAppState();
     const { isConnecting, connect } = useVideoContext();
 
     const roomState = useRoomState();
@@ -37,6 +40,7 @@ export default function App({
     const connectToTwilio = (): void => {
         if (twilioToken) {
             connect(twilioToken);
+            appState.setIsVideoConnected(true);
         }
     };
 
