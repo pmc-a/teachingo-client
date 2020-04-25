@@ -22,6 +22,7 @@ export interface StateContextType {
     shouldDisplaySummary: boolean;
     setShouldDisplaySummary: React.Dispatch<React.SetStateAction<boolean>>;
     userType: UserTypes;
+    updateAttendance(lessonId?: number): Promise<Response>;
 }
 
 export const StateContext = createContext<StateContextType | null>(null);
@@ -115,6 +116,16 @@ export default function AppStateProvider(
                 },
             });
         },
+        updateAttendance: async (lessonId): Promise<Response> => {
+            const endpoint = `${apiDomain}/api/lessons/${lessonId}/attendance`;
+            return fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    authorization: accessToken,
+                    'Content-Type': 'application/json',
+                },
+            });
+        },
     };
 
     const getToken: StateContextType['getToken'] = lessonId => {
@@ -187,9 +198,32 @@ export default function AppStateProvider(
             });
     };
 
+    const updateAttendance: StateContextType['updateAttendance'] = (
+        lessonId?: number
+    ) => {
+        return contextValue
+            .updateAttendance(lessonId)
+            .then(async res => {
+                if (res.status >= 500) {
+                    throw new Error('Something went wrong');
+                }
+                return res;
+            })
+            .catch(err => {
+                setError(err);
+                return Promise.reject(err);
+            });
+    };
+
     return (
         <StateContext.Provider
-            value={{ ...contextValue, getToken, login, fetchLessons }}
+            value={{
+                ...contextValue,
+                getToken,
+                login,
+                fetchLessons,
+                updateAttendance,
+            }}
         >
             {props.children}
         </StateContext.Provider>

@@ -88,6 +88,7 @@ const StudentPage: React.FC = () => {
 
         const twilioToken = await appState.getToken(selectedLesson?.id);
         setTwilioVideoToken(twilioToken);
+        appState.updateAttendance(selectedLesson?.id);
     };
 
     return (
