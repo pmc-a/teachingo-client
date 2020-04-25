@@ -10,6 +10,7 @@
     border: 1px white solid;
     min-width: 75%;
     margin-right: 10px;
+    height: 80vh;
 }
 
 .lesson-list-container {
@@ -32,4 +33,63 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+}
+
+.instruction-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+}
+
+/* Arrow */
+
+.arrow {
+    position: relative;
+    margin: -7% auto;
+    width: 100px;
+    transform: rotate(-95deg);
+    -webkit-transform: rotate(-95deg);
+    -moz-transform: rotate(-95deg);
+    -ms-transform: rotate(-95deg);
+}
+
+.arrow .curve {
+    border: 15px solid #be5f4b;
+    border-color: transparent transparent transparent #be5f4b;
+    height: 360px;
+    width: 1200px;
+    border-radius: 230px 0 0 150px;
+}
+
+.arrow .point {
+    position: absolute;
+    left: 40px;
+    top: 315px;
+}
+
+.arrow .point:before,
+.arrow .point:after {
+    border: 5px solid #be5f4b;
+    height: 35px;
+    content: '';
+    position: absolute;
+}
+
+.arrow .point:before {
+    top: -16px;
+    left: -9px;
+    transform: rotate(-74deg);
+    -webkit-transform: rotate(-74deg);
+    -moz-transform: rotate(-74deg);
+    -ms-transform: rotate(-74deg);
+}
+
+.arrow .point:after {
+    top: -26px;
+    left: 7px;
+    transform: rotate(12deg);
+    -webkit-transform: rotate(12deg);
+    -moz-transform: rotate(12deg);
+    -ms-transform: rotate(12deg);
 }

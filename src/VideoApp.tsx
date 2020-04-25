@@ -26,7 +26,11 @@ const connectionOptions: ConnectOptions = {
     preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
 };
 
-export const VideoApp = (): React.ReactElement => {
+export const VideoApp = ({
+    twilioToken,
+}: {
+    twilioToken?: string;
+}): React.ReactElement => {
     const { error, setError } = useAppState();
 
     return (
@@ -35,7 +39,7 @@ export const VideoApp = (): React.ReactElement => {
                 dismissError={(): void => setError(null)}
                 error={error}
             />
-            <VideoCallingApp />
+            <VideoCallingApp twilioToken={twilioToken} />
         </VideoProvider>
     );
 };

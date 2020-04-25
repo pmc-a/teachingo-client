@@ -5,7 +5,7 @@ export interface StateContextType {
     accessToken: string | null;
     error: TwilioError | null;
     setError(error: TwilioError | null): void;
-    getToken(name: string, room: string, passcode?: string): Promise<string>;
+    getToken(lessonId?: number): Promise<string>;
     login(username: string, password: string): Promise<LoginResponse>;
     fetchLessons(): Promise<LessonsResponse>;
     user?: null | {
@@ -54,7 +54,9 @@ export default function AppStateProvider(
 ): React.ReactElement {
     const [error, setError] = useState<TwilioError | null>(null);
     const [isFetching, setIsFetching] = useState(false);
-    const [accessToken, setAccessToken] = useState('');
+    const [accessToken, setAccessToken] = useState(
+        localStorage.getItem('accessToken') || ''
+    );
     const [userType, setUserType] = useState('');
 
     let contextValue = {
@@ -67,14 +69,16 @@ export default function AppStateProvider(
 
     contextValue = {
         ...contextValue,
-        getToken: async (identity, roomName): Promise<string> => {
-            const headers = new window.Headers();
-            const endpoint = process.env.REACT_APP_TOKEN_ENDPOINT || '/token';
-            const params = new window.URLSearchParams({ identity, roomName });
+        getToken: async (lessonId): Promise<string> => {
+            const endpoint = `${apiDomain}/api/token?lessonId=${lessonId}`;
 
-            return fetch(`${endpoint}?${params}`, { headers }).then(res =>
-                res.text()
-            );
+            return fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    authorization: accessToken,
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => res.text());
         },
         login: async (email, password): Promise<LoginResponse> => {
             const endpoint = `${apiDomain}/api/login`;
@@ -103,10 +107,10 @@ export default function AppStateProvider(
         },
     };
 
-    const getToken: StateContextType['getToken'] = (name, room) => {
+    const getToken: StateContextType['getToken'] = lessonId => {
         setIsFetching(true);
         return contextValue
-            .getToken(name, room)
+            .getToken(lessonId)
             .then(res => {
                 setIsFetching(false);
                 return res;
@@ -135,6 +139,10 @@ export default function AppStateProvider(
                 if (res && res.parsedResponse && res.parsedResponse) {
                     // Do we maybe need to parse this into local storage?
                     // A browser refresh will clear this down because it's simply stored in React Context
+                    localStorage.setItem(
+                        'accessToken',
+                        res.parsedResponse.token
+                    );
                     setAccessToken(res.parsedResponse.token);
                     setUserType(res.parsedResponse.type);
                 }

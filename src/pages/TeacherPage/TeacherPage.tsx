@@ -45,6 +45,10 @@ const TeacherPage: React.FC = () => {
 
     const [isStartNowSelected, setStartNowSelected] = useState(false);
 
+    const [twilioVideoToken, setTwilioVideoToken] = useState<
+        string | undefined
+    >(undefined);
+
     useEffect(() => {
         (async (): Promise<void> => {
             const response = await appState.fetchLessons();
@@ -53,22 +57,42 @@ const TeacherPage: React.FC = () => {
         // eslint-disable-next-line
     }, []);
 
+    const handleStartLessonClick = async (): Promise<void> => {
+        setStartNowSelected(true);
+
+        const twilioToken = await appState.getToken(selectedLesson?.id);
+        setTwilioVideoToken(twilioToken);
+    };
+
     return (
         <div className="teacher-page-container">
             <h1>Lessons</h1>
             <div className="teacher-page-main-container">
                 <div className="lesson-stream-view">
+                    {!selectedLesson && !isStartNowSelected && (
+                        <>
+                            <div className="instruction-wrapper">
+                                <h1>Get started by clicking on a lesson!</h1>
+                            </div>
+                            <div className="arrow">
+                                <div className="curve"></div>
+                                <div className="point"></div>
+                            </div>
+                        </>
+                    )}
                     {selectedLesson && !isStartNowSelected && (
                         <div className="start-button">
                             <Button
                                 variant="contained"
-                                onClick={(): void => setStartNowSelected(true)}
+                                onClick={handleStartLessonClick}
                             >
                                 Start {selectedLesson?.name}
                             </Button>
                         </div>
                     )}
-                    {isStartNowSelected && <VideoApp />}
+                    {isStartNowSelected && (
+                        <VideoApp twilioToken={twilioVideoToken} />
+                    )}
                 </div>
                 <LessonList
                     lessons={lessons}

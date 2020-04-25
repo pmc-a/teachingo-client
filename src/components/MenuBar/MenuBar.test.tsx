@@ -162,25 +162,6 @@ describe('the MenuBar component', () => {
         expect(window.history.replaceState).not.toHaveBeenCalled();
     });
 
-    it('should call getToken() and connect() on submit', done => {
-        mockedUseRoomState.mockImplementation(() => 'disconnected');
-        mockedUseVideoContext.mockImplementation(
-            () =>
-                ({ isConnecting: false, connect: mockConnect, room: {} } as any)
-        );
-        const { getByLabelText, getByText } = render(renderComponent());
-        fireEvent.change(getByLabelText('Name'), { target: { value: 'Foo' } });
-        fireEvent.change(getByLabelText('Room'), {
-            target: { value: 'Foo Test' },
-        });
-        fireEvent.click(getByText('Join Room').parentElement!);
-        expect(mockGetToken).toHaveBeenCalledWith('Foo', 'Foo Test');
-        setImmediate(() => {
-            expect(mockConnect).toHaveBeenCalledWith('mockToken');
-            done();
-        });
-    });
-
     it('should populate the Room name from the URL', () => {
         mockedUseRoomState.mockImplementation(() => 'disconnected');
         mockedUseVideoContext.mockImplementation(

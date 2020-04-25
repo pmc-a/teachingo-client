@@ -76,7 +76,6 @@ export default function MenuBar(): React.ReactElement {
                 window.encodeURI(`/room/${roomName}`)
             );
         }
-        getToken(name, roomName).then(token => connect(token));
     };
 
     return (

@@ -50,6 +50,10 @@ const StudentPage: React.FC = () => {
     );
     const [isJoinNowSelected, setJoinNowSelected] = useState(false);
 
+    const [twilioVideoToken, setTwilioVideoToken] = useState<
+        string | undefined
+    >(undefined);
+
     useEffect(() => {
         (async (): Promise<void> => {
             const response = await appState.fetchLessons();
@@ -78,10 +82,13 @@ const StudentPage: React.FC = () => {
         }
     }, [selectedLesson]);
 
-    function handleJoinNowClick(): void {
+    const handleJoinNowClick = async (): Promise<void> => {
         setJoinNowSelected(true);
         setIsSelectedLessonStarted(false);
-    }
+
+        const twilioToken = await appState.getToken(selectedLesson?.id);
+        setTwilioVideoToken(twilioToken);
+    };
 
     return (
         <div className="student-page-container">
@@ -106,7 +113,9 @@ const StudentPage: React.FC = () => {
                         </div>
                     )}
 
-                    {isJoinNowSelected && <VideoApp />}
+                    {isJoinNowSelected && (
+                        <VideoApp twilioToken={twilioVideoToken} />
+                    )}
                 </div>
                 <LessonList
                     lessons={lessons}

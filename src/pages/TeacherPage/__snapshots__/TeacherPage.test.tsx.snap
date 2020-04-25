@@ -12,7 +12,25 @@ exports[`TeacherPage should successfully render 1`] = `
   >
     <div
       className="lesson-stream-view"
-    />
+    >
+      <div
+        className="instruction-wrapper"
+      >
+        <h1>
+          Get started by clicking on a lesson!
+        </h1>
+      </div>
+      <div
+        className="arrow"
+      >
+        <div
+          className="curve"
+        />
+        <div
+          className="point"
+        />
+      </div>
+    </div>
     <LessonList
       lessons={Array []}
       setSelectedLesson={[Function]}

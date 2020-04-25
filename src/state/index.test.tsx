@@ -45,7 +45,7 @@ xdescribe('the useAppState hook', () => {
 
         let token;
         await act(async () => {
-            token = await result.current.getToken('testname', 'testroom');
+            token = await result.current.getToken(1234);
         });
 
         expect(token).toBe('mockVideoToken');
@@ -109,7 +109,7 @@ xdescribe('the useAppState hook', () => {
             expect(result.current.isFetching).toEqual(false);
 
             await act(async () => {
-                result.current.getToken('test', 'test');
+                result.current.getToken(123);
                 await waitForNextUpdate();
                 expect(result.current.isFetching).toEqual(true);
                 jest.runOnlyPendingTimers();
@@ -141,7 +141,7 @@ xdescribe('the useAppState hook', () => {
             expect(result.current.isFetching).toEqual(false);
 
             await act(async () => {
-                result.current.getToken('test', 'test').catch(() => {});
+                result.current.getToken(1234).catch(() => {});
                 await waitForNextUpdate();
                 expect(result.current.isFetching).toEqual(true);
                 jest.runOnlyPendingTimers();
