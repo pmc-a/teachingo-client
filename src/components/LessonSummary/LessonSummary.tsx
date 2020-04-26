@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CountUp from 'react-countup';
 
 import './LessonSummary.css';
 import {
@@ -55,9 +56,12 @@ const LessonSummary: React.FC<Props> = ({ selectedLesson }: Props) => {
                                     <span className="stat-title">
                                         Attendance
                                     </span>
-                                    <span className="large-stat">
-                                        {lessonStats?.percentageAttended}%
-                                    </span>
+                                    <CountUp
+                                        className="large-stat"
+                                        duration={2.75}
+                                        end={lessonStats.percentageAttended}
+                                        suffix="%"
+                                    />
                                 </div>
                             </CardContent>
                         </Card>

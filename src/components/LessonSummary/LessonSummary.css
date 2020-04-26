@@ -6,6 +6,7 @@
 
 .summary-heading {
     text-align: center;
+    font-size: 45px;
 }
 
 .divider-wrapper {
@@ -26,12 +27,16 @@
 
 .follow-up-cta-button {
     margin-top: 10px !important;
+    background-color: #5533ff !important;
+    color: white !important;
 }
 
 .card-wrapper {
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
+    background-image: linear-gradient(to right, #5533ff, #09ccff) !important;
+    color: white !important;
 }
 
 .stat-wrapper {

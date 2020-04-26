@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`StudentPage should successfully render 1`] = `
-<div
-  className="student-page-container"
->
-  <h1>
-    Lessons
-  </h1>
+<Fragment>
+  <Navbar
+    pageName="Lessons"
+  />
   <div
-    className="student-page-main-container"
+    className="student-page-container"
   >
     <div
-      className="lesson-stream-view"
+      className="student-page-main-container"
     >
-      <div />
+      <div
+        className="lesson-stream-view"
+      />
+      <LessonList
+        lessons={Array []}
+        setSelectedLesson={[Function]}
+      />
     </div>
-    <LessonList
-      lessons={Array []}
-      setSelectedLesson={[Function]}
-    />
   </div>
-</div>
+</Fragment>
 `;

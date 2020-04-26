@@ -9,6 +9,7 @@ import VideoApp from '../../VideoApp';
 
 import './TeacherPage.css';
 import LessonSummary from '../../components/LessonSummary/LessonSummary';
+import Navbar from '../../components/Navbar/Navbar';
 
 interface LessonListProps {
     lessons: Lesson[];
@@ -75,53 +76,64 @@ const TeacherPage: React.FC = () => {
     };
 
     return (
-        <div className="teacher-page-container">
-            <h1>Lessons</h1>
-            <div className="teacher-page-main-container">
-                <div className="lesson-stream-view">
-                    {!selectedLesson && !isStartNowSelected && (
-                        <>
-                            <div className="instruction-wrapper">
-                                <h1>Get started by clicking on a lesson!</h1>
+        <>
+            <Navbar pageName="Lessons" />
+            <div className="teacher-page-container">
+                <div className="teacher-page-main-container">
+                    <div className="lesson-stream-view">
+                        {!selectedLesson && !isStartNowSelected && (
+                            <>
+                                <div className="instruction-wrapper">
+                                    <h1>
+                                        Get started by clicking on a lesson!
+                                    </h1>
+                                </div>
+                                <div className="arrow">
+                                    <div className="curve"></div>
+                                    <div className="point"></div>
+                                </div>
+                            </>
+                        )}
+                        {selectedLesson && !isStartNowSelected && (
+                            <div className="start-button">
+                                <Button
+                                    className="start-lesson-button"
+                                    variant="contained"
+                                    onClick={handleStartLessonClick}
+                                >
+                                    Start {selectedLesson?.name}
+                                </Button>
                             </div>
-                            <div className="arrow">
-                                <div className="curve"></div>
-                                <div className="point"></div>
-                            </div>
-                        </>
+                        )}
+                        {isStartNowSelected &&
+                            !appState.shouldDisplaySummary && (
+                                <VideoApp twilioToken={twilioVideoToken} />
+                            )}
+
+                        {isStartNowSelected &&
+                            appState.shouldDisplaySummary && (
+                                <LessonSummary
+                                    selectedLesson={selectedLesson}
+                                />
+                            )}
+                    </div>
+                    {!appState.isVideoConnected && (
+                        <LessonList
+                            lessons={lessons}
+                            handleSelectedLessonClick={
+                                handleSelectedLessonClick
+                            }
+                        />
                     )}
-                    {selectedLesson && !isStartNowSelected && (
-                        <div className="start-button">
-                            <Button
-                                variant="contained"
-                                onClick={handleStartLessonClick}
-                            >
-                                Start {selectedLesson?.name}
-                            </Button>
+
+                    {appState.isVideoConnected && (
+                        <div className="lesson-list-container">
+                            Placeholder for chat
                         </div>
                     )}
-                    {isStartNowSelected && !appState.shouldDisplaySummary && (
-                        <VideoApp twilioToken={twilioVideoToken} />
-                    )}
-
-                    {isStartNowSelected && appState.shouldDisplaySummary && (
-                        <LessonSummary selectedLesson={selectedLesson} />
-                    )}
                 </div>
-                {!appState.isVideoConnected && (
-                    <LessonList
-                        lessons={lessons}
-                        handleSelectedLessonClick={handleSelectedLessonClick}
-                    />
-                )}
-
-                {appState.isVideoConnected && (
-                    <div className="lesson-list-container">
-                        Placeholder for chat
-                    </div>
-                )}
             </div>
-        </div>
+        </>
     );
 };
 

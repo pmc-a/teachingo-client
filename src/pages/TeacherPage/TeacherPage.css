@@ -7,21 +7,27 @@
 }
 
 .lesson-stream-view {
-    border: 1px white solid;
+    border: 1px grey solid;
+    border-radius: 15px;
     min-width: 75%;
     margin-right: 10px;
     height: 80vh;
+    -webkit-box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
 .lesson-list-container {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-left: 5px;
 }
 
 .lesson-card {
     margin-bottom: 10px;
     cursor: pointer;
+    background-color: #09ccff !important;
 }
 
 .lesson-card-content {
@@ -33,6 +39,11 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+}
+
+.start-lesson-button {
+    background-color: #5533ff !important;
+    color: white !important;
 }
 
 .instruction-wrapper {
@@ -55,8 +66,8 @@
 }
 
 .arrow .curve {
-    border: 15px solid #be5f4b;
-    border-color: transparent transparent transparent #be5f4b;
+    border: 15px solid #5533ff;
+    border-color: transparent transparent transparent #5533ff;
     height: 360px;
     width: 1200px;
     border-radius: 230px 0 0 150px;
@@ -70,7 +81,7 @@
 
 .arrow .point:before,
 .arrow .point:after {
-    border: 5px solid #be5f4b;
+    border: 5px solid #5533ff;
     height: 35px;
     content: '';
     position: absolute;

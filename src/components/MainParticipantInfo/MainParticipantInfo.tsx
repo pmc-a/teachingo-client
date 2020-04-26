@@ -21,7 +21,6 @@ const useStyles = makeStyles({
         },
     },
     identity: {
-        background: 'rgba(0, 0, 0, 0.7)',
         padding: '0.1em 0.3em',
         margin: '1em',
         fontSize: '1.2em',

@@ -8,48 +8,55 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {
+    createMuiTheme,
+    ThemeProvider,
+    createStyles,
+    Theme,
+} from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles({
-    container: {
-        height: '100vh',
-        background: '#0D122B',
-    },
-    twilioLogo: {
-        width: '55%',
-        display: 'block',
-    },
-    videoLogo: {
-        width: '25%',
-        padding: '2.4em 0 2.1em',
-    },
-    paper: {
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        padding: '2em',
-        marginTop: '4em',
-        background: 'white',
-        color: 'black',
-    },
-    button: {
-        color: 'black',
-        background: 'white',
-        margin: '0.8em 0 0.7em',
-        textTransform: 'none',
-    },
-    errorMessage: {
-        color: 'red',
-        display: 'flex',
-        alignItems: 'center',
-        margin: '1em 0 0.2em',
-        '& svg': {
-            marginRight: '0.4em',
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        container: {
+            height: '100vh',
+            backgroundImage: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
         },
-    },
-});
+        paper: {
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            padding: '2em',
+            marginTop: '15em',
+            background: 'white',
+            color: 'black',
+        },
+        button: {
+            color: 'black',
+            background: 'white',
+            margin: '0.8em 0 0.7em',
+            textTransform: 'none',
+            height: '50px',
+            width: '100px',
+        },
+        errorMessage: {
+            color: 'red',
+            display: 'flex',
+            alignItems: 'center',
+            margin: '1em 0 0.2em',
+            '& svg': {
+                marginRight: '0.4em',
+            },
+        },
+        form: {
+            width: '60%',
+        },
+        textInput: {
+            width: '100%',
+        },
+    })
+);
 
 const theme = createMuiTheme({
     palette: {
@@ -92,9 +99,12 @@ export default function LoginPage(): React.ReactElement {
                 className={classes.container}
             >
                 <Paper className={classes.paper} elevation={6}>
-                    <h1>Login</h1>
-
-                    <form onSubmit={handleSubmit}>
+                    <img
+                        width="60%"
+                        src="https://i.imgur.com/EfvHtsz.png"
+                        alt="Teachingo Logo"
+                    />
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container alignItems="center" direction="column">
                             <TextField
                                 id="input-username"
@@ -103,6 +113,7 @@ export default function LoginPage(): React.ReactElement {
                                     e: ChangeEvent<HTMLInputElement>
                                 ): void => setEmail(e.target.value)}
                                 type="text"
+                                className={classes.textInput}
                             />
                             <TextField
                                 id="input-password"
@@ -111,6 +122,7 @@ export default function LoginPage(): React.ReactElement {
                                     e: ChangeEvent<HTMLInputElement>
                                 ): void => setPassword(e.target.value)}
                                 type="password"
+                                className={classes.textInput}
                             />
                             <div>
                                 {authError && (
@@ -129,7 +141,7 @@ export default function LoginPage(): React.ReactElement {
                                 type="submit"
                                 disabled={!email.length || !password.length}
                             >
-                                Submit
+                                Log In
                             </Button>
                         </Grid>
                     </form>

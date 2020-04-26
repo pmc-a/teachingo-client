@@ -8,6 +8,7 @@ import { useAppState, Lesson } from '../../state';
 import VideoApp from '../../VideoApp';
 
 import './StudentPage.css';
+import Navbar from '../../components/Navbar/Navbar';
 
 interface LessonListProps {
     lessons: Lesson[];
@@ -92,38 +93,42 @@ const StudentPage: React.FC = () => {
     };
 
     return (
-        <div className="student-page-container">
-            <h1>Lessons</h1>
-            <div className="student-page-main-container">
-                <div className="lesson-stream-view">
-                    <div>{selectedLesson?.name}</div>
-                    {isSelectedLessonInFuture && (
-                        <div>
-                            This lesson has not started yet, try again later!
-                        </div>
-                    )}
+        <>
+            <Navbar pageName="Lessons" />
 
-                    {isSelectedLessonStarted && (
-                        <div className="join-button">
-                            <Button
-                                variant="contained"
-                                onClick={handleJoinNowClick}
-                            >
-                                Join Now
-                            </Button>
-                        </div>
-                    )}
+            <div className="student-page-container">
+                <div className="student-page-main-container">
+                    <div className="lesson-stream-view">
+                        {isSelectedLessonInFuture && (
+                            <div>
+                                This lesson has not started yet, try again
+                                later!
+                            </div>
+                        )}
 
-                    {isJoinNowSelected && (
-                        <VideoApp twilioToken={twilioVideoToken} />
-                    )}
+                        {isSelectedLessonStarted && (
+                            <div className="start-button">
+                                <Button
+                                    className="start-lesson-button"
+                                    variant="contained"
+                                    onClick={handleJoinNowClick}
+                                >
+                                    Join {selectedLesson?.name}
+                                </Button>
+                            </div>
+                        )}
+
+                        {isJoinNowSelected && (
+                            <VideoApp twilioToken={twilioVideoToken} />
+                        )}
+                    </div>
+                    <LessonList
+                        lessons={lessons}
+                        setSelectedLesson={setSelectedLesson}
+                    />
                 </div>
-                <LessonList
-                    lessons={lessons}
-                    setSelectedLesson={setSelectedLesson}
-                />
             </div>
-        </div>
+        </>
     );
 };
 

@@ -7,21 +7,27 @@
 }
 
 .lesson-stream-view {
-    border: 1px white solid;
+    border: 1px grey solid;
+    border-radius: 15px;
     min-width: 75%;
     margin-right: 10px;
     height: 80vh;
+    -webkit-box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 7px 10px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
 .lesson-list-container {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-left: 5px;
 }
 
 .lesson-card {
     margin-bottom: 10px;
     cursor: pointer;
+    background-color: #09ccff !important;
 }
 
 .lesson-card-content {
