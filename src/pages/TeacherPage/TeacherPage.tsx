@@ -8,6 +8,7 @@ import { useAppState, Lesson } from '../../state';
 import VideoApp from '../../VideoApp';
 
 import './TeacherPage.css';
+import LessonSummary from '../../components/LessonSummary/LessonSummary';
 
 interface LessonListProps {
     lessons: Lesson[];
@@ -104,7 +105,7 @@ const TeacherPage: React.FC = () => {
                     )}
 
                     {isStartNowSelected && appState.shouldDisplaySummary && (
-                        <div>Summary here!</div>
+                        <LessonSummary selectedLesson={selectedLesson} />
                     )}
                 </div>
                 {!appState.isVideoConnected && (

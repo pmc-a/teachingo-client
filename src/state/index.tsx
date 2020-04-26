@@ -8,6 +8,7 @@ export interface StateContextType {
     getToken(lessonId?: number): Promise<string>;
     login(username: string, password: string): Promise<LoginResponse>;
     fetchLessons(): Promise<LessonsResponse>;
+    fetchLessonStats(lessonId?: number): Promise<LessonStatsResponse>;
     user?: null | {
         displayName: undefined;
         photoURL: undefined;
@@ -30,6 +31,19 @@ export const StateContext = createContext<StateContextType | null>(null);
 export enum UserTypes {
     student = 'student',
     teacher = 'teacher',
+}
+
+interface AbsentStudent {
+    id: string;
+    first_name: string;
+    last_name: string;
+}
+
+export interface LessonStatsResponse extends Response {
+    numStudentsInClass?: number;
+    numAttendedStudents?: number;
+    percentageAttended?: number;
+    absentStudentsDetails?: AbsentStudent[];
 }
 
 interface LoginResponse extends Response {
@@ -107,6 +121,19 @@ export default function AppStateProvider(
         },
         fetchLessons: async (): Promise<LessonsResponse> => {
             const endpoint = `${apiDomain}/api/lessons`;
+
+            return fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    authorization: accessToken,
+                    'Content-Type': 'application/json',
+                },
+            });
+        },
+        fetchLessonStats: async (
+            lessonId: number
+        ): Promise<LessonStatsResponse> => {
+            const endpoint = `${apiDomain}/api/lessons/${lessonId}/stats`;
 
             return fetch(endpoint, {
                 method: 'GET',
@@ -198,6 +225,26 @@ export default function AppStateProvider(
             });
     };
 
+    const fetchLessonStats: StateContextType['fetchLessonStats'] = (
+        lessonId: number
+    ) => {
+        return contextValue
+            .fetchLessonStats(lessonId)
+            .then(async res => {
+                if (res.status === 400 || res.status === 404) {
+                    throw new Error('Incorrect username or password!');
+                } else if (res.status >= 500) {
+                    throw new Error('Something went wrong');
+                }
+                return res;
+            })
+            .catch(err => {
+                setError(err);
+                setIsFetching(false);
+                return Promise.reject(err);
+            });
+    };
+
     const updateAttendance: StateContextType['updateAttendance'] = (
         lessonId?: number
     ) => {
@@ -222,6 +269,7 @@ export default function AppStateProvider(
                 getToken,
                 login,
                 fetchLessons,
+                fetchLessonStats,
                 updateAttendance,
             }}
         >

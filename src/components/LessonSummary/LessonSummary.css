@@ -1,0 +1,51 @@
+.overall-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-heading {
+    text-align: center;
+}
+
+.divider-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.column-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.follow-up-cta-button {
+    margin-top: 10px !important;
+}
+
+.card-wrapper {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.stat-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-title {
+    font-size: 20px;
+}
+
+.large-stat {
+    font-size: 50px;
+    font-weight: bold;
+}
