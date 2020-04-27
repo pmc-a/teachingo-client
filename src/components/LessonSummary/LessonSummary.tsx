@@ -24,6 +24,7 @@ const LessonSummary: React.FC<Props> = ({ selectedLesson }: Props) => {
     const [lessonStats, setLessonStats] = useState<LessonStatsResponse | null>(
         null
     );
+    const [contactStudentsSuccess, setContactStudentsSuccess] = useState(false);
 
     useEffect(() => {
         (async (): Promise<void> => {
@@ -35,6 +36,18 @@ const LessonSummary: React.FC<Props> = ({ selectedLesson }: Props) => {
         })();
         // eslint-disable-next-line
     }, []);
+
+    const handleContactAbsenteesClick = async (): Promise<void> => {
+        const absentStudentIds = lessonStats?.absentStudentsDetails?.map(
+            absentStudent => absentStudent.id
+        );
+
+        await appState.contactAbsentStudents(
+            absentStudentIds,
+            selectedLesson?.id
+        );
+        setContactStudentsSuccess(true);
+    };
 
     if (
         lessonStats &&
@@ -125,9 +138,13 @@ const LessonSummary: React.FC<Props> = ({ selectedLesson }: Props) => {
                         <Button
                             className="follow-up-cta-button"
                             variant="contained"
+                            onClick={handleContactAbsenteesClick}
                         >
-                            Email Absentees
+                            Contact Absentees
                         </Button>
+                        {contactStudentsSuccess && (
+                            <h3>Successfully Contacted!</h3>
+                        )}
                     </div>
                 </div>
             </div>

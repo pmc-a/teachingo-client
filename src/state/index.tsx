@@ -24,6 +24,10 @@ export interface StateContextType {
     setShouldDisplaySummary: React.Dispatch<React.SetStateAction<boolean>>;
     userType: UserTypes;
     updateAttendance(lessonId?: number): Promise<Response>;
+    contactAbsentStudents(
+        absentStudents?: string[],
+        lessonId?: number
+    ): Promise<Response>;
 }
 
 export const StateContext = createContext<StateContextType | null>(null);
@@ -153,6 +157,22 @@ export default function AppStateProvider(
                 },
             });
         },
+        contactAbsentStudents: async (
+            absentStudents,
+            lessonId
+        ): Promise<Response> => {
+            const endpoint = `${apiDomain}/api/lessons/${lessonId}/absentees`;
+            return fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    authorization: accessToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    absentStudents,
+                }),
+            });
+        },
     };
 
     const getToken: StateContextType['getToken'] = lessonId => {
@@ -262,6 +282,24 @@ export default function AppStateProvider(
             });
     };
 
+    const contactAbsentStudents: StateContextType['contactAbsentStudents'] = (
+        absentStudents,
+        lessonId
+    ) => {
+        return contextValue
+            .contactAbsentStudents(absentStudents, lessonId)
+            .then(async res => {
+                if (res.status >= 500) {
+                    throw new Error('Something went wrong');
+                }
+                return res;
+            })
+            .catch(err => {
+                setError(err);
+                return Promise.reject(err);
+            });
+    };
+
     return (
         <StateContext.Provider
             value={{
@@ -271,6 +309,7 @@ export default function AppStateProvider(
                 fetchLessons,
                 fetchLessonStats,
                 updateAttendance,
+                contactAbsentStudents,
             }}
         >
             {props.children}
