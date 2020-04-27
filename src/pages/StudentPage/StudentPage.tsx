@@ -9,6 +9,7 @@ import VideoApp from '../../VideoApp';
 
 import './StudentPage.css';
 import Navbar from '../../components/Navbar/Navbar';
+import LiveChat from '../../components/LiveChat/LiveChat';
 
 interface LessonListProps {
     lessons: Lesson[];
@@ -122,10 +123,18 @@ const StudentPage: React.FC = () => {
                             <VideoApp twilioToken={twilioVideoToken} />
                         )}
                     </div>
-                    <LessonList
-                        lessons={lessons}
-                        setSelectedLesson={setSelectedLesson}
-                    />
+                    {!appState.isVideoConnected && (
+                        <LessonList
+                            lessons={lessons}
+                            setSelectedLesson={setSelectedLesson}
+                        />
+                    )}
+
+                    {appState.isVideoConnected && (
+                        <div className="lesson-list-container">
+                            <LiveChat />
+                        </div>
+                    )}
                 </div>
             </div>
         </>

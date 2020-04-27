@@ -118,7 +118,7 @@ const TeacherPage: React.FC = () => {
                                 />
                             )}
                     </div>
-                    {appState.isVideoConnected && (
+                    {!appState.isVideoConnected && (
                         <LessonList
                             lessons={lessons}
                             handleSelectedLessonClick={
@@ -127,7 +127,7 @@ const TeacherPage: React.FC = () => {
                         />
                     )}
 
-                    {!appState.isVideoConnected && (
+                    {appState.isVideoConnected && (
                         <div className="lesson-list-container">
                             <LiveChat />
                         </div>

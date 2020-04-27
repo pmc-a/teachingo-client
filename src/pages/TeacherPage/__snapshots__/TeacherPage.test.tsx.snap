@@ -32,11 +32,10 @@ exports[`TeacherPage should successfully render 1`] = `
           />
         </div>
       </div>
-      <div
-        className="lesson-list-container"
-      >
-        <LiveChat />
-      </div>
+      <LessonList
+        handleSelectedLessonClick={[Function]}
+        lessons={Array []}
+      />
     </div>
   </div>
 </Fragment>
