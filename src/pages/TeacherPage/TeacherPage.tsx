@@ -10,6 +10,7 @@ import VideoApp from '../../VideoApp';
 import './TeacherPage.css';
 import LessonSummary from '../../components/LessonSummary/LessonSummary';
 import Navbar from '../../components/Navbar/Navbar';
+import LiveChat from '../../components/LiveChat/LiveChat';
 
 interface LessonListProps {
     lessons: Lesson[];
@@ -117,7 +118,7 @@ const TeacherPage: React.FC = () => {
                                 />
                             )}
                     </div>
-                    {!appState.isVideoConnected && (
+                    {appState.isVideoConnected && (
                         <LessonList
                             lessons={lessons}
                             handleSelectedLessonClick={
@@ -126,9 +127,9 @@ const TeacherPage: React.FC = () => {
                         />
                     )}
 
-                    {appState.isVideoConnected && (
+                    {!appState.isVideoConnected && (
                         <div className="lesson-list-container">
-                            Placeholder for chat
+                            <LiveChat />
                         </div>
                     )}
                 </div>

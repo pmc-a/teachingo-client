@@ -1,0 +1,18 @@
+.live-chat-wrapper {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper {
+    margin-top: auto;
+}
+
+.chat-input {
+    height: 25px;
+}
+
+.chat-input-button {
+    border: none;
+    background-color: transparent;
+}
